@@ -5,7 +5,7 @@
     <title>Update user</title>
 </head>
 <body>
-<form th:method="patch" th:action="@{/users/edit}" th:object="${user}">
+<form th:method="patch" th:action="@{/admin/edit}" th:object="${user}">
     <label for="id"></label>
     <input readonly type ="hidden" th:field="*{id}" id="id"/>
     <label for="name">Enter name: </label>
@@ -20,7 +20,27 @@
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
     <br/>
+    <label for="username">Enter username: </label>
+    <input type="text" th:field="*{username}" id="username"/>
+    <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+    <br/>
+    <label for="password">Enter password: </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+    <br/>
+    <label for="roles"><strong>Choose a role/roles:</strong></label>
+    <table id = roles>
+        <tbody>
+        <tr th:each="role : ${roles}">
+            <td th:text="${role.name}"></td>
+            <td><input type="checkbox" name="rolesNames" checked="checked" th:value="${role.name}"/></td>
+        </tr>
+        </tbody>
+    </table>
     <input type="submit" value="Update!"/>
+</form>
+<form th:action="@{/logout}" method="POST">
+    <input type="submit" value="Logout"/>
 </form>
 </body>
 </html>
