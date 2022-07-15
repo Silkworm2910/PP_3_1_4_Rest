@@ -13,10 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.*;
 
 
@@ -25,9 +21,6 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private UserDAO userDAO;
     private RoleDAO roleDAO;
@@ -80,7 +73,7 @@ public class UserService implements UserDetailsService {
             user.setRoles(roles);
         }
         user.setPassword(encoder.encode(user.getPassword()));
-        entityManager.merge(user);
+        userDAO.save(user);
     }
 
     @Transactional
