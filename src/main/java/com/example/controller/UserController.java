@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
-
         private final UserService userService;
 
         @Autowired
@@ -22,7 +21,7 @@ public class UserController {
 
         @GetMapping
         public String findById(@AuthenticationPrincipal User user, Model model) {
-            model.addAttribute("user", userService.FindUserByID(user.getId()));
+            model.addAttribute("user", userService.findUserByID(user.getId()));
             return "user-info";
         }
 

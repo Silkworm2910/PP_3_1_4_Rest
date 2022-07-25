@@ -22,9 +22,9 @@ import java.util.*;
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private UserDAO userDAO;
-    private RoleDAO roleDAO;
-    private BCryptPasswordEncoder encoder;
+    private final UserDAO userDAO;
+    private final RoleDAO roleDAO;
+    private final BCryptPasswordEncoder encoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User FindUserByID(int id) {
+    public User findUserByID(int id) {
         Optional<User> userFromDB = userDAO.findById(id);
         return userFromDB.orElse(new User());
     }
@@ -45,24 +45,19 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public boolean saveUser(User user, String[] rolesNames) {
+    public void saveUser(User user, String[] rolesNames) {
         User userFromDB = userDAO.findByUsername(user.getUsername());
-        if (userFromDB != null) {
-            return false;
+        if (userFromDB == null) {
+            Set<Role> roles = new HashSet<>(roleDAO.findAllByNameIn(rolesNames));
+            user.setPassword(encoder.encode(user.getPassword()));
+            user.setRoles(roles);
+            userDAO.save(user);
         }
-        Set<Role> roles = new HashSet<>(roleDAO.findAllByNameIn(rolesNames));
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setRoles(roles);
-        userDAO.save(user);
-        return true;
     }
 
-    public boolean deleteUser(int id) {
+    public void deleteUser(int id) {
         if (userDAO.findById(id).isPresent()) {
             userDAO.deleteById(id);
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -72,30 +67,14 @@ public class UserService implements UserDetailsService {
             Set<Role> roles = new HashSet<>(roleDAO.findAllByNameIn(rolesNames));
             user.setRoles(roles);
         }
-        user.setPassword(encoder.encode(user.getPassword()));
+        if ("*****".equals(user.getPassword())) {
+            User userFromDB = userDAO.findById(user.getId())
+                    .orElseThrow(() -> new UsernameNotFoundException("no user with such id"));
+            user.setPassword(userFromDB.getPassword());
+        } else {
+            user.setPassword(encoder.encode(user.getPassword()));
+        }
         userDAO.save(user);
-    }
-
-    @Transactional
-    public void createInitUser() {
-        User initUser = new User();
-        initUser.setName("admin");
-        initUser.setUsername("admin");
-        initUser.setEmail("admin@mail.com");
-        initUser.setPassword("admin");
-        String[] roles = {"Admin", "User"};
-        saveUser(initUser, roles);
-    }
-
-    @Transactional
-    public void createDefaultUser() {
-        User defaultUser = new User();
-        defaultUser.setUsername("user" + (int)(Math.random() * 1000));
-        defaultUser.setName(defaultUser.getUsername());
-        defaultUser.setEmail(defaultUser.getUsername() + "@gmail.com");
-        defaultUser.setPassword("12345");
-        String[] roles = {"User"};
-        saveUser(defaultUser, roles);
     }
 
     public Optional<User> findUserByRoles(Set<String> roles) {

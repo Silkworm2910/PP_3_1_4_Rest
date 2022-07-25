@@ -31,15 +31,13 @@
         <tbody>
         <tr th:each="role : ${roles}">
             <td th:text="${role.name}"></td>
-            <td><input type="checkbox" name="rolesNames" checked="checked" th:value="${role.name}"/></td>
+            <td><input type="checkbox" name="rolesNames" th:value="${role.name}"/></td>
         </tr>
+        <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name error</div>
         </tbody>
     </table>
     <br><br>
     <input type="submit" value="Create!"/>
-</form>
-<form th:method="post" th:action="@{/admin/new/default}" th:object="${user}">
-    <input type="submit" value="Create default user"/>
 </form>
 <br/>
 <form th:action="@{/logout}" method="POST">

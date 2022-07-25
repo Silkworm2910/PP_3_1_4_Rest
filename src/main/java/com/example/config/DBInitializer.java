@@ -1,25 +1,23 @@
-package com.example.service;
+package com.example.config;
 
 import com.example.model.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.model.User;
+import com.example.service.RoleService;
+import com.example.service.UserService;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Set;
 
-@Service
+@Component
 public class DBInitializer {
 
-    private UserService userService;
-    private RoleService roleService;
+    private final UserService userService;
+    private final RoleService roleService;
 
-    @Autowired
-    public void setUserManagementService(UserService userService) {
+    public DBInitializer(UserService userService, RoleService roleService) {
         this.userService = userService;
-    }
-
-    @Autowired
-    public void setRoleManagementService(RoleService roleService) {
         this.roleService = roleService;
     }
 
@@ -64,8 +62,16 @@ public class DBInitializer {
         return userService.findUserByRoles(Set.of("ROLE_ADMIN")).isPresent();
     }
 
-    private void addAdmin() {
-        userService.createInitUser();
+    @Transactional
+    public void addAdmin() {
+        User initUser = new User();
+        initUser.setName("admin");
+        initUser.setUsername("admin");
+        initUser.setEmail("admin@mail.com");
+        initUser.setPassword("admin");
+        String[] roles = {"Admin", "User"};
+        userService.saveUser(initUser, roles);
     }
+
 
 }

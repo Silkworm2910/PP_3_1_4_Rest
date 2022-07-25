@@ -8,10 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Set;
 
@@ -47,8 +44,24 @@ public class User implements UserDetails {
     @Size(min = 3, message = "Password should be at least 3 characters")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @NotEmpty(message = "Choose at least one role")
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 37 * result + id;
+        return result;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

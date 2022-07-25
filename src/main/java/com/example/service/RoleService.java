@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoleService {
 
-    private RoleDAO roleDAO;
+    private final RoleDAO roleDAO;
 
     public boolean roleExists(String role) {
         return roleDAO.findByAuthority(role) != null;

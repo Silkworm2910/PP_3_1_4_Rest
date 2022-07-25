@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
 @Controller
 @AllArgsConstructor
 @RequestMapping("/admin")
@@ -28,7 +27,7 @@ public class AdminController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.FindUserByID(id));
+        model.addAttribute("user", userService.findUserByID(id));
         return "user-info";
     }
 
@@ -41,28 +40,21 @@ public class AdminController {
     @PostMapping("/new")
     public String create(@Valid User user,
                          BindingResult bindingResult,
-                         @RequestParam(value = "rolesNames") String[] rolesNames) {
-        if (bindingResult.hasErrors()) {
+                         Model model,
+                         @RequestParam(required = false, value = "rolesNames") String[] rolesNames) {
+        if (bindingResult.hasErrors() || "*****".equals(user.getPassword())) {
+            model.addAttribute("roles", roleService.findAll());
             return "user-create";
         }
         userService.saveUser(user, rolesNames);
         return "redirect:/admin";
     }
 
-    @GetMapping("/new/default")
-    public String createdDefault() {
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/new/default")
-    public String createDefault() {
-        userService.createDefaultUser();
-        return "redirect:/admin";
-    }
-
     @GetMapping("/{id}/edit")
     public String update(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userService.FindUserByID(id));
+        User user = userService.findUserByID(id);
+        model.addAttribute("user", user);
+        model.addAttribute("userRoles", user.getRoles());
         model.addAttribute("roles", roleService.findAll());
         return "user-update";
     }
@@ -70,8 +62,11 @@ public class AdminController {
     @PatchMapping("/edit")
     public String update(@Valid User user,
                          BindingResult bindingResult,
-                         @RequestParam(value = "rolesNames") String[] rolesNames) {
+                         Model model,
+                         @RequestParam(required = false, value = "rolesNames") String[] rolesNames) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleService.findAll());
+            model.addAttribute("userRoles", userService.findUserByID(user.getId()).getRoles());
             return "user-update";
         }
         userService.updateUser(user, rolesNames);
