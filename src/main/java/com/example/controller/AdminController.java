@@ -41,7 +41,7 @@ public class AdminController {
     public String create(@Valid User user,
                          BindingResult bindingResult,
                          Model model,
-                         @RequestParam(required = false, value = "rolesNames") String[] rolesNames) {
+                         @RequestParam(value = "rolesNames") String[] rolesNames) {
         if (bindingResult.hasErrors() || "*****".equals(user.getPassword())) {
             model.addAttribute("roles", roleService.findAll());
             return "user-create";
@@ -63,7 +63,7 @@ public class AdminController {
     public String update(@Valid User user,
                          BindingResult bindingResult,
                          Model model,
-                         @RequestParam(required = false, value = "rolesNames") String[] rolesNames) {
+                         @RequestParam(value = "rolesNames") String[] rolesNames) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("roles", roleService.findAll());
             model.addAttribute("userRoles", userService.findUserByID(user.getId()).getRoles());

@@ -44,7 +44,6 @@ public class User implements UserDetails {
     @Size(min = 3, message = "Password should be at least 3 characters")
     private String password;
 
-    @NotEmpty(message = "Choose at least one role")
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles;
 

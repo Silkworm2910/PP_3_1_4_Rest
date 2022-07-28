@@ -35,7 +35,6 @@
             <td th:text="${role.name}"></td>
             <td><input type="checkbox" name="rolesNames" th:checked="${#lists.contains(userRoles, role)}" th:value="${role.name}"/></td>
         </tr>
-        <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name error</div>
         </tbody>
     </table>
     <input type="submit" value="Update!"/>
