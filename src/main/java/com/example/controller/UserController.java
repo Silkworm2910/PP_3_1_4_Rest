@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.example.model.User;
-import com.example.service.UserService;
+import com.example.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
-        private final UserService userService;
+        private final UserServiceImpl userService;
 
         @Autowired
-        public UserController(UserService userService) {
+        public UserController(UserServiceImpl userService) {
             this.userService = userService;
         }
 

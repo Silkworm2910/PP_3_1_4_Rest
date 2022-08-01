@@ -1,15 +1,19 @@
 package com.example.dao;
 
 import com.example.model.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.Set;
 
-public interface RoleDAO extends JpaRepository<Role, Integer> {
+public interface RoleDAO {
 
-    Role findByAuthority(String authority);
+    void saveRole(Role role);
 
-    Role findByName(String name);
+    Set<Role> findAllRoles();
+
+    Optional<Role> findByAuthority(String authority);
+
+    Optional<Role> findByName(String name);
 
     Set<Role> findAllByNameIn(String[] roleNames);
 }

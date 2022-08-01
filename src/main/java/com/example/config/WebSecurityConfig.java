@@ -1,6 +1,6 @@
 package com.example.config;
 
-import com.example.service.UserService;
+import com.example.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SuccessUserHandler successUserHandler;
 

@@ -1,14 +1,23 @@
 package com.example.dao;
 
 import com.example.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface UserDAO extends JpaRepository<User,Integer> {
+public interface UserDAO {
+    void saveUser(User user);
 
-    User findByUsername(String username);
+    User findById(int id);
 
-    Optional<User> findFirstByRoles_AuthorityIn(Set<String> roles);
+    void updateUser(User user);
+
+    void deleteUserById(int id);
+
+    List<User> findAllUsers();
+
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findUserByRoles(Set<String> role_admin);
 }

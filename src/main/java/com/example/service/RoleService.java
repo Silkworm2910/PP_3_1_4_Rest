@@ -1,34 +1,14 @@
 package com.example.service;
 
-import com.example.dao.RoleDAO;
 import com.example.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
+import java.util.Set;
 
-@Service
-@Getter
-@Setter
-@AllArgsConstructor
-public class RoleService {
+public interface RoleService {
 
-    private final RoleDAO roleDAO;
+    void saveRole(Role role);
 
-    public boolean roleExists(String role) {
-        return roleDAO.findByAuthority(role) != null;
-    }
+    Set<Role> findAllRoles();
 
-    public void saveRole(Role role) {
-        Role roleFromDB = roleDAO.findByName(role.getName());
-        if (roleFromDB == null) {
-          roleDAO.save(role);
-        }
-    }
-
-    public List<Role> findAll() {
-        return roleDAO.findAll();
-    }
+    boolean roleExists(String role);
 }

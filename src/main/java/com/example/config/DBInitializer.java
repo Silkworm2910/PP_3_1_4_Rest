@@ -4,6 +4,7 @@ import com.example.model.Role;
 import com.example.model.User;
 import com.example.service.RoleService;
 import com.example.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,15 +12,11 @@ import javax.annotation.PostConstruct;
 import java.util.Set;
 
 @Component
+@AllArgsConstructor
 public class DBInitializer {
 
     private final UserService userService;
     private final RoleService roleService;
-
-    public DBInitializer(UserService userService, RoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
 
     @PostConstruct
     private void initDatabase() {
@@ -59,7 +56,7 @@ public class DBInitializer {
     }
 
     private boolean adminExists() {
-        return userService.findUserByRoles(Set.of("ROLE_ADMIN")).isPresent();
+        return userService.findUserByRoles(Set.of("Admin")).isPresent();
     }
 
     @Transactional
