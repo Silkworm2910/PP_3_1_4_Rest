@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:fragment="header">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="navbar-brand">
+            <a class="text-white bg-dark">
+                <a class="font-weight-bold" th:text="${user.getUsername()}">VALUE</a>
+                with roles:
+                <span th:each="role : ${user.getRoles()}">
+                    <a class="text-uppercase" th:text="${role.getName()}"></a>
+                </span>
+            </a>
+        </div>
+        <li>
+            <form action="/logout" method="post">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">
+                    <p class="text-secondary">Logout</p>
+                </button>
+            </form>
+        </li>
+    </nav>
+</header>
+</body>
+</html>

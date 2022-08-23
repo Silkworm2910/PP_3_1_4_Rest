@@ -4,6 +4,7 @@ import com.example.model.User;
 import com.example.service.RoleServiceImpl;
 import com.example.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,13 +21,14 @@ public class AdminController {
     private final RoleServiceImpl roleService;
 
     @GetMapping
-    public String findAll(Model model) {
+    public String findAll(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("users", userService.findAllUsers());
+        model.addAttribute("user", userService.findUserByID(user.getId()));
         return "user-list";
     }
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") int id, Model model) {
+    public String findById(@PathVariable("id") int id, @AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", userService.findUserByID(id));
         return "user-info";
     }
