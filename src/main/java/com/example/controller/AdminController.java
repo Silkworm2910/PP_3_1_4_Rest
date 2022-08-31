@@ -24,6 +24,8 @@ public class AdminController {
     public String findAll(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("users", userService.findAllUsers());
         model.addAttribute("user", userService.findUserByID(user.getId()));
+        model.addAttribute("newUser", new User());
+        model.addAttribute("roles", roleService.findAllRoles());
         return "user-list";
     }
 
@@ -33,22 +35,27 @@ public class AdminController {
         return "user-info";
     }
 
-    @GetMapping("/new")
-    public String newPerson(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("roles", roleService.findAllRoles());
-        return "user-create";
-    }
 
     @PostMapping("/new")
-    public String create(@Valid User user,
+    public String create(@Valid User newUser,
                          BindingResult bindingResult,
+                         @AuthenticationPrincipal User user,
                          Model model,
                          @RequestParam(value = "rolesNames") String[] rolesNames) {
-        if (bindingResult.hasErrors() || "*****".equals(user.getPassword())) {
+        if (bindingResult.hasErrors() || "*****".equals(newUser.getPassword())) {
             model.addAttribute("roles", roleService.findAllRoles());
-            return "user-create";
+            model.addAttribute("newUser", newUser);
+            model.addAttribute("user", user);
+            return "user-list";
         }
-        userService.saveUser(user, rolesNames);
+
+        if (!userService.saveUser(newUser, rolesNames)) {
+            model.addAttribute("userExistsError", "User with this username already exists");
+            model.addAttribute("newUser", newUser);
+            model.addAttribute("roles", roleService.findAllRoles());
+            return "user-list";
+        }
+
         return "redirect:/admin";
     }
 

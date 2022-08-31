@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface UserService {
-    void saveUser(User user, String[] rolesNames);
+    boolean saveUser(User user, String[] rolesNames);
 
     User findUserByID(int id);
 

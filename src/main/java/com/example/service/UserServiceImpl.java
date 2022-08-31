@@ -44,15 +44,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void saveUser(User user, String[] rolesNames) {
+    public boolean saveUser(User user, String[] rolesNames) {
         User userFromDB = userDAO.findByUsername(user.getUsername()).orElse(null);
         if (userFromDB == null) {
             Set<Role> roles = roleDAO.findAllByNameIn(rolesNames);
             user.setPassword(encoder.encode(user.getPassword()));
             user.setRoles(roles);
             userDAO.saveUser(user);
+            return true;
+        } else {
+            return false;
         }
     }
+
 
     @Override
     @Transactional

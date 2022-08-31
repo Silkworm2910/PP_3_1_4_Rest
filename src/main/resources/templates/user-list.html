@@ -80,16 +80,75 @@
                                         </tbody>
                                     </table>
                                 </div>
-                         </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                    </div>
-                </div>
-            </div>
+
+
+
+                                <!-- add User-->
+                                <div id="addUser" class="tab-pane fade">
+                                    <div class="tab-pane fade show active">
+                                    <div class="d-flex flex-column bd-highlight mb-3">
+                                        <div class="card">
+                                            <h4 class="card-header">
+                                                <div class="p-2 bd-highlight">
+                                                    Add new user
+                                                </div>
+                                            </h4>
+                                            <div class="card-body">
+                                                <div class="col-7 align-self-center">
+                                                    <form th:action="@{/admin/new}" th:object="${newUser}" method="post">
+                                                        <div class="form-group">
+                                                            <label for="name">Name:</label>
+                                                            <input th:field="*{name}" type="text" class="form-control" name="name" id="name" required>
+                                                            <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+                                                            <br>
+                                                            <label for="name">Age:</label>
+                                                            <input th:field="*{age}" type="text" class="form-control" age="age" id="age" required>
+                                                            <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</div>
+                                                            <br>
+                                                            <label for="name">Email:</label>
+                                                            <input th:field="*{email}" type="text" class="form-control" name="email" id="email" required>
+                                                            <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
+                                                            <br>
+                                                            <label for="name">Username:</label>
+                                                            <input th:field="*{username}" type="text" class="form-control" name="username" id="username" required>
+                                                            <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</div>
+                                                            <br>
+                                                            <label for="name">Password:</label>
+                                                            <input th:field="*{password}" type="password" class="form-control" name="password" id="password" required>
+                                                            <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</div>
+                                                            <br>
+                                                            <label for="rolesNames">Roles:</label>
+                                                            <select class="form-control" multiple name="rolesNames" id="rolesNames">
+                                                                <option selected
+                                                                    th:each="role : ${roles}"
+                                                                    th:text="${role.name}"
+                                                                    th:value="${role.name}">
+                                                                </option>
+                                                            </select>
+                                                            <br>
+                                                            <div th:if="${userExistsError}" class="alert alert-danger" role="alert" th:utext="${userExistsError}"></div>
+                                                            <br>
+                                                            <button type="submit" class="btn btn-primary">Add new user</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                    </div>
+                                </div>
         </div>
     </div>
 </div>
+
+
 
 </body>
 </html>
