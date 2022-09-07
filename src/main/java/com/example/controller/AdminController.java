@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.model.Role;
 import com.example.model.User;
 import com.example.service.RoleServiceImpl;
 import com.example.service.UserServiceImpl;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @Controller
 @AllArgsConstructor
@@ -27,12 +29,6 @@ public class AdminController {
         model.addAttribute("newUser", new User());
         model.addAttribute("roles", roleService.findAllRoles());
         return "user-list";
-    }
-
-    @GetMapping("/{id}")
-    public String findById(@PathVariable("id") int id, @AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("user", userService.findUserByID(id));
-        return "user-info";
     }
 
 
@@ -59,32 +55,28 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String update(Model model, @PathVariable("id") int id) {
-        User user = userService.findUserByID(id);
-        model.addAttribute("user", user);
-        model.addAttribute("userRoles", user.getRoles());
-        model.addAttribute("roles", roleService.findAllRoles());
-        return "user-update";
+    @RequestMapping("/user-get")
+    @ResponseBody
+    public User getUser(Integer id) {
+        return userService.findUserByID(id);
     }
 
-    @PatchMapping("/edit")
-    public String update(@Valid User user,
-                         BindingResult bindingResult,
-                         Model model,
-                         @RequestParam(value = "rolesNames") String[] rolesNames) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("roles", roleService.findAllRoles());
-            model.addAttribute("userRoles", userService.findUserByID(user.getId()).getRoles());
-            return "user-update";
-        }
-        userService.updateUser(user, rolesNames);
+    @RequestMapping("/roles-get")
+    @ResponseBody
+    public Set<Role> getAllRoles() {
+        return roleService.findAllRoles();
+    }
+
+    @PostMapping("/edit")
+    public String update(User editUser,
+                         @RequestParam(value = "rolesNamesEdit") String[] rolesNamesEdit) {
+        userService.updateUser(editUser, rolesNamesEdit);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        userService.deleteUserById(id);
+    @PostMapping("/delete")
+    public String delete(User deleteUser) {
+        userService.deleteUserById(deleteUser.getId());
         return "redirect:/admin";
     }
 }

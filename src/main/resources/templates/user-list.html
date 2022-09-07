@@ -6,6 +6,8 @@
     <title>Admin panel</title>
 </head>
 <body>
+<script th:src="@{/js/modal-edit.js}"></script>
+<script th:src="@{/js/modal-delete.js}"></script>
 <section th:insert="navbar::header"></section>
 <div class="container-fluid">
     <div class="row">
@@ -71,21 +73,113 @@
                                             </td>
 
                                             <td>
-                                                <button type="button" class="btn btn-info">Edit</button>
+                                                <a th:href="@{/admin/user-get/(id=${user.id})}" class="btn btn-info" id="editButton">Edit</a>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-danger">Delete</button>
+                                                <a th:href="@{/admin/user-get/(id=${user.id})}" class="btn btn-danger" id="deleteButton">Delete</a>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
+
+                                    <!-- Edit Modal -->
+                                    <div class="modal fade" tabindex="-1" role="dialog"
+                                         aria-labelledby="editModal" aria-hidden="true" id="modal-edit">
+                                        <form th:action="@{/admin/edit}"  method="post">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Edit user</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="idEdit">ID</label>
+                                                            <input type="text" class="form-control" id="idEdit" name="id" readonly>
+                                                            <br>
+                                                            <label for="nameEdit">Name:</label>
+                                                            <input type="text" class="form-control" id="nameEdit" name="name" required>
+                                                            <br>
+                                                            <label for="userNameEdit">Username:</label>
+                                                            <input type="text" class="form-control" id="userNameEdit" name="username" required>
+                                                            <br>
+                                                            <label for="ageEdit">Age:</label>
+                                                            <input type="number" class="form-control" id="ageEdit" name="age" required>
+                                                            <br>
+                                                            <label for="emailEdit">Email:</label>
+                                                            <input type="email" class="form-control" id="emailEdit" name="email" required>
+                                                            <br>
+                                                            <label for="passwordEdit">Password:</label>
+                                                            <input type="password" class="form-control" id="passwordEdit" name="password" required>
+                                                            <br>
+                                                            <label for="rolesEdit">Role:</label>
+                                                            <select class="form-control" multiple id="rolesEdit" name="rolesNamesEdit" required>
+                                                            </select>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Edit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
                                 </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Delete modal -->
 
+                        <div class="modal fade" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteModal" aria-hidden="true" id="modal-delete">
+                            <form th:action="@{/admin/delete}"  method="post">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete user</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="idDelete">ID</label>
+                                                <input type="text" class="form-control" id="idDelete" name="id" readonly>
+                                                <br>
+                                                <label for="nameDelete">Name</label>
+                                                <input type="text" class="form-control" id="nameDelete" name="name" readonly>
+                                                <br>
+                                                <label for="ageDelete">Age:</label>
+                                                <input type="number" class="form-control" id="ageDelete" name="age" readonly>
+                                                <br>
+                                                <label for="emailDelete">Email:</label>
+                                                <input type="email" class="form-control" id="emailDelete" name="email" readonly>
+                                                <br>
+                                                <label for="usernameDelete">Username</label>
+                                                <input type="text" class="form-control" id="usernameDelete" name="username" readonly>
+                                                <br>
+                                                <label for="rolesDelete">Role:</label>
+                                                <select class="form-control" multiple id="rolesDelete" name="roleNamesDelete" readonly>
+
+                                                </select>
+                                                <br>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
                                 <!-- add User-->
                                 <div id="addUser" class="tab-pane fade">
