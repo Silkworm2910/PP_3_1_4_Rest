@@ -1,5 +1,6 @@
 package com.example.model;
 
+import com.example.dto.UserReqDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

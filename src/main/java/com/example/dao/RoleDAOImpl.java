@@ -21,9 +21,8 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public Set<Role> findAllRoles() {
-        return entityManager
-                .createQuery("select r from Role r order by r.id", Role.class)
-                .getResultStream().collect(Collectors.toSet());
+        return new HashSet<>(entityManager
+                .createQuery("select r from Role r order by r.id", Role.class).getResultList());
     }
 
     @Override

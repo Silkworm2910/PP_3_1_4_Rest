@@ -21,12 +21,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public boolean roleExists(String role) {
-        return roleDAO.findByAuthority(role).isPresent();
-    }
-
-    @Override
-    @Transactional
     public void saveRole(Role role) {
         Role roleFromDB = roleDAO.findByName(role.getName()).orElse(null);
         if (roleFromDB == null) {
@@ -35,7 +29,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    @Transactional
     public Set<Role> findAllRoles() {
         return roleDAO.findAllRoles();
     }

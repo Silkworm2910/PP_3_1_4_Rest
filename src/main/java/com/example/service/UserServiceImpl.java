@@ -60,30 +60,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void deleteUserById(int id) {
+    public boolean deleteUserById(int id) {
+        User userFromDB = userDAO.findById(id);
+        if (userFromDB != null) {
             userDAO.deleteUserById(id);
-    }
-
-    @Override
-    @Transactional
-    public void updateUser(User user, String[] rolesNames) {
-        if (rolesNames != null) {
-            Set<Role> roles = new HashSet<>(roleDAO.findAllByNameIn(rolesNames));
-            user.setRoles(roles);
-        }
-        if ("*****".equals(user.getPassword())) {
-            User userFromDB = userDAO.findById(user.getId());
-            user.setPassword(userFromDB.getPassword());
+            return true;
         } else {
-            user.setPassword(encoder.encode(user.getPassword()));
+            return false;
         }
-        userDAO.updateUser(user);
     }
-
 
     @Override
     @Transactional
-    public Optional<User> findUserByRoles(Set<String> roleNames) {
-        return userDAO.findUserByRoles(roleNames);
+    public boolean updateUserByID(int id, String[] rolesNames) {
+        User userFromDB = userDAO.findById(id);
+        if (userFromDB != null) {
+            if (rolesNames != null) {
+                Set<Role> roles = new HashSet<>(roleDAO.findAllByNameIn(rolesNames));
+                userFromDB.setRoles(roles);
+            }
+            if ("*****".equals(userFromDB.getPassword())) {
+                userFromDB.setPassword(userFromDB.getPassword());
+            } else {
+                userFromDB.setPassword(encoder.encode(userFromDB.getPassword()));
+            }
+            userDAO.updateUser(userFromDB);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

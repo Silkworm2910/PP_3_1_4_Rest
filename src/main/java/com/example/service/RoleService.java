@@ -9,6 +9,4 @@ public interface RoleService {
     void saveRole(Role role);
 
     Set<Role> findAllRoles();
-
-    boolean roleExists(String role);
 }

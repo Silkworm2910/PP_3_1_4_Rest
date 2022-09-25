@@ -20,6 +20,15 @@ public class Role implements GrantedAuthority {
 
     private String name;
 
+    @Transient
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
+
+    @Override
+    public String getAuthority() {
+        return authority;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -33,14 +42,5 @@ public class Role implements GrantedAuthority {
         int result = 17;
         result = 37 * result + id;
         return result;
-    }
-
-    @Transient
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
-
-    @Override
-    public String getAuthority() {
-        return authority;
     }
 }
