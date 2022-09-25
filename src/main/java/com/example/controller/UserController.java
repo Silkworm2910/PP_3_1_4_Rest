@@ -1,14 +1,15 @@
 package com.example.controller;
 
+import com.example.dto.UserRespDTO;
 import com.example.model.User;
 import com.example.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -20,9 +21,8 @@ public class UserController {
         }
 
         @GetMapping
-        public String findById(@AuthenticationPrincipal User user, Model model) {
-            model.addAttribute("user", userService.findUserByID(user.getId()));
-            return "user-info";
+        public ResponseEntity<UserRespDTO> findById(@AuthenticationPrincipal User user) {
+            return new ResponseEntity<>(userService.findUserByID(user.getId()), HttpStatus.OK);
         }
 
     }

@@ -1,15 +1,12 @@
 package com.example.dto;
 
-import com.example.model.Role;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 
 @Data
-public class UserReqDTO {
+public class UserReqDTO implements Serializable {
 
     @NotEmpty(message = "Name shouldn't be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")

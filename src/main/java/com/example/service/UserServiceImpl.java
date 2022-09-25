@@ -2,6 +2,8 @@ package com.example.service;
 
 import com.example.dao.RoleDAO;
 import com.example.dao.UserDAO;
+import com.example.dto.UserReqDTO;
+import com.example.dto.UserRespDTO;
 import com.example.model.Role;
 import com.example.model.User;
 import lombok.AllArgsConstructor;
@@ -33,22 +35,57 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findUserByID(int id) {
-        return userDAO.findById(id);
+    public UserRespDTO findUserByID(int id) {
+        UserRespDTO userRespDTO = new UserRespDTO();
+        User user = userDAO.findById(id);
+        userRespDTO.setId(id);
+        userRespDTO.setName(user.getName());
+        userRespDTO.setUsername(user.getUsername());
+        userRespDTO.setEmail(user.getEmail());
+        userRespDTO.setAge(user.getAge());
+        String[] rolesNames = new String[user.getRoles().size()];
+        int i = 0;
+        for (Role role : user.getRoles()) {
+            rolesNames[i++] = role.getName();
+        }
+        userRespDTO.setRolesNames(rolesNames);
+        return userRespDTO;
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return userDAO.findAllUsers();
+    public List<UserRespDTO> findAllUsers() {
+        List<UserRespDTO> userRespDTOS = new ArrayList<>();
+        List<User> userList = userDAO.findAllUsers();
+        for (User user : userList) {
+            UserRespDTO userRespDTO = new UserRespDTO();
+            userRespDTO.setId(user.getId());
+            userRespDTO.setName(user.getName());
+            userRespDTO.setUsername(user.getUsername());
+            userRespDTO.setEmail(user.getEmail());
+            userRespDTO.setAge(user.getAge());
+            String[] rolesNames = new String[user.getRoles().size()];
+            int i = 0;
+            for (Role role : user.getRoles()) {
+               rolesNames[i++] = role.getName();
+            }
+            userRespDTO.setRolesNames(rolesNames);
+            userRespDTOS.add(userRespDTO);
+        }
+        return userRespDTOS;
     }
 
     @Override
     @Transactional
-    public boolean saveUser(User user, String[] rolesNames) {
-        User userFromDB = userDAO.findByUsername(user.getUsername()).orElse(null);
+    public boolean saveUser(UserReqDTO userReqDTO) {
+        User userFromDB = userDAO.findByUsername(userReqDTO.getUsername()).orElse(null);
         if (userFromDB == null) {
-            Set<Role> roles = roleDAO.findAllByNameIn(rolesNames);
-            user.setPassword(encoder.encode(user.getPassword()));
+            User user = new User();
+            Set<Role> roles = roleDAO.findAllByNameIn(userReqDTO.getRolesNames());
+            user.setName(userReqDTO.getName());
+            user.setUsername(userReqDTO.getUsername());
+            user.setEmail(userReqDTO.getEmail());
+            user.setAge(userReqDTO.getAge());
+            user.setPassword(encoder.encode(userReqDTO.getPassword()));
             user.setRoles(roles);
             userDAO.saveUser(user);
             return true;
@@ -72,18 +109,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public boolean updateUserByID(int id, String[] rolesNames) {
+    public boolean updateUserByID(int id, UserReqDTO userReqDTO) {
         User userFromDB = userDAO.findById(id);
         if (userFromDB != null) {
-            if (rolesNames != null) {
-                Set<Role> roles = new HashSet<>(roleDAO.findAllByNameIn(rolesNames));
+                Set<Role> roles = new HashSet<>(roleDAO.findAllByNameIn(userReqDTO.getRolesNames()));
                 userFromDB.setRoles(roles);
+            if (!"*****".equals(userReqDTO.getPassword())) {
+                userFromDB.setPassword(encoder.encode(userReqDTO.getPassword()));
             }
-            if ("*****".equals(userFromDB.getPassword())) {
-                userFromDB.setPassword(userFromDB.getPassword());
-            } else {
-                userFromDB.setPassword(encoder.encode(userFromDB.getPassword()));
-            }
+            userFromDB.setName(userReqDTO.getName());
+            userFromDB.setAge(userReqDTO.getAge());
+            userFromDB.setEmail(userReqDTO.getEmail());
+            userFromDB.setUsername(userReqDTO.getUsername());
             userDAO.updateUser(userFromDB);
             return true;
         }

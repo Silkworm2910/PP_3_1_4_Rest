@@ -1,5 +1,6 @@
 package com.example.config;
 
+import com.example.dto.UserReqDTO;
 import com.example.model.Role;
 import com.example.model.User;
 import com.example.service.RoleService;
@@ -38,13 +39,13 @@ public class DBInitializer {
     }
 
     public void addAdmin() {
-        User initUser = new User();
+        UserReqDTO initUser = new UserReqDTO();
         initUser.setName("admin");
         initUser.setUsername("admin");
         initUser.setEmail("admin@mail.com");
         initUser.setPassword("admin");
-        String[] roles = {"Admin", "User"};
-        userService.saveUser(initUser, roles);
+        initUser.setRolesNames(new String[] {"Admin", "User"});
+        userService.saveUser(initUser);
     }
 
 }

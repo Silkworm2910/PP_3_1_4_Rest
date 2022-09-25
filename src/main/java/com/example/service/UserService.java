@@ -1,18 +1,19 @@
 package com.example.service;
 
-import com.example.model.User;
+import com.example.dto.UserReqDTO;
+import com.example.dto.UserRespDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
-    boolean saveUser(User user, String[] rolesNames);
 
-    User findUserByID(int id);
+    boolean saveUser(UserReqDTO userReqDTO);
 
-    boolean updateUserByID(int id, String[] rolesNames);
+    UserRespDTO findUserByID(int id);
+
+    boolean updateUserByID(int id, UserReqDTO userReqDTO);
 
     boolean deleteUserById(int id);
 
-    List<User> findAllUsers();
+    List<UserRespDTO> findAllUsers();
 }
