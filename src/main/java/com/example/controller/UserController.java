@@ -1,29 +1,23 @@
 package com.example.controller;
 
-import com.example.dto.UserRespDTO;
 import com.example.model.User;
-import com.example.service.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
 
-        private final UserServiceImpl userService;
-
-        @Autowired
-        public UserController(UserServiceImpl userService) {
-            this.userService = userService;
-        }
-
-        @GetMapping
-        public ResponseEntity<UserRespDTO> findById(@AuthenticationPrincipal User user) {
-            return new ResponseEntity<>(userService.findUserByID(user.getId()), HttpStatus.OK);
-        }
-
+    @GetMapping(value = "/info")
+    public String showInfo(Model model) {
+        User user = (User) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        model.addAttribute("user", user);
+        return "user-info";
     }
+}
 

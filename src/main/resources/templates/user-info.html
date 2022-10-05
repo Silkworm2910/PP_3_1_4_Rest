@@ -10,10 +10,10 @@
     <div class="row">
         <div class="col-md-2">
             <div class="list-group row">
-                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}" class="list-group-item list-group-item-action">
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/users}" class="list-group-item list-group-item-action">
                     Admin
                 </a>
-                <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/user}" class="list-group-item list-group-item-action active">
+                <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/user/info}" class="list-group-item list-group-item-action active">
                     User
                 </a>
             </div>
@@ -52,9 +52,9 @@
                                             <td th:text="${user.email}"></td>
                                             <td th:text="${user.username}"></td>
                                             <td>
-                                                     <span class="text-uppercase"
+                                                     <span
                                                            th:each="role : ${user.getRoles()}">
-                                                     <a class="text-uppercase" th:text="${role.getName()}"></a>
+                                                     <a th:text="${role.getName()}"></a>
                                                      </span>
                                             </td>
 
