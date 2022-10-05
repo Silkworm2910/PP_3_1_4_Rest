@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRespDTO.setUsername(user.getUsername());
         userRespDTO.setEmail(user.getEmail());
         userRespDTO.setAge(user.getAge());
+        userRespDTO.setPassword("*****");
         String[] rolesNames = new String[user.getRoles().size()];
         int i = 0;
         for (Role role : user.getRoles()) {
@@ -129,5 +130,3 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 }
-
-//

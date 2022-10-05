@@ -114,7 +114,6 @@
 
                         <div class="modal fade" tabindex="-1" role="dialog"
                              aria-labelledby="deleteModal" aria-hidden="true" id="modal-delete">
-                            <form th:action="@{/admin/delete}"  method="post">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -140,20 +139,16 @@
                                                 <label for="usernameDelete">Username</label>
                                                 <input type="text" class="form-control" id="usernameDelete" name="username" readonly>
                                                 <br>
-                                                <label for="rolesDelete">Role:</label>
-                                                <select class="form-control" multiple id="rolesDelete" name="roleNamesDelete" readonly>
+                                                <label for="rolesNamesDelete">Role:</label>
+                                                <select class="form-control" multiple id="rolesNamesDelete" name="roleNames" readonly>
 
                                                 </select>
                                                 <br>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </div>
+                                        <div class="modal-footer" id="deleteFooter"></div>
                                     </div>
                                 </div>
-                            </form>
                         </div>
 
                                 <!-- add User-->

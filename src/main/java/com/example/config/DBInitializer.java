@@ -2,7 +2,6 @@ package com.example.config;
 
 import com.example.dto.UserReqDTO;
 import com.example.model.Role;
-import com.example.model.User;
 import com.example.service.RoleService;
 import com.example.service.UserService;
 import lombok.AllArgsConstructor;

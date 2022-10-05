@@ -23,7 +23,8 @@ function updateUserTable() {
                     " data-target=\"#modal-edit\">Edit</button></td>" +
 
                     "<td><button onclick='openDeleteForm(" + user.id + ")' " +
-                    "class=\"btn btn-danger\" data-toggle=\"modal\" data-target =\"#modal-delete\">Delete</button></td>" +
+                    "type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" + " +
+                    " data-target =\"#modal-delete\">Delete</button></td>" +
                     "</tr>"
             });
             userList.innerHTML = output;
@@ -53,7 +54,7 @@ function openEditForm(id) {
             for (let i in roles) {
                 let hasRole = "";
                 for (let r in user.rolesNames) {
-                    if (roles[i] === user.rolesNames[r]) {
+                    if (roles[i].name === user.rolesNames[r]) {
                         hasRole = "selected";
                     }
                 }
@@ -65,8 +66,8 @@ function openEditForm(id) {
                 "<button data-dismiss='modal'" +
                 " type=\"button\" class=\"btn btn-secondary\">Close</button>" +
 
-                "<button onclick='sendEditForm()'" +
-                " type=\"button\" class=\"btn btn-primary\">Edit</button>"
+                "<button onclick='sendEditForm("+user.id+")'" +
+            " type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target =\"#modal-edit\">Edit</button>"
             )
         })
 }
@@ -95,15 +96,15 @@ function openDeleteForm(id) {
 }
 
 function cleanDeleteRoles() {
-    $("#authoritiesDelete").empty();
+    $("#rolesNamesDelete").empty();
 }
 
 function cleanEditRoles() {
-    $("#authoritiesEdit").empty();
+    $("#rolesNamesEdit").empty();
 }
 
 function cleanCreateRoles() {
-    $("#rolesNamesAddAdd").empty();
+    $("#rolesNamesAdd").empty();
 }
 
 function closeEditModal() {
@@ -139,26 +140,18 @@ async function addCreateFormRoles() {
     }
 }
 
-function sendEditForm() {
-    let roles = [];
-    if ($("#User").is(":selected")) {
-        roles.push("User");
-    }
-    if ($("#Admin").is(":selected")) {
-        roles.push("Admin");
-    }
+function sendEditForm(id) {
 
     let user = {
-        id: $("#idEdit").val(),
         name: $("#nameEdit").val(),
         age: $("#ageEdit").val(),
         email: $("#emailEdit").val(),
         username: $("#usernameEdit").val(),
         password: $("#passwordEdit").val(),
-        roles: roles
+        rolesNames: $("#rolesNamesEdit").val()
     }
 
-    fetch('/rest/users', {
+    fetch('/rest/users/' + id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -168,13 +161,6 @@ function sendEditForm() {
 }
 
 function addUser() {
-    let rolesNames = [];
-    if ($("#addUser").is(":selected")) {
-        rolesNames.push("User");
-    }
-    if ($("#addAdmin").is(":selected")) {
-        rolesNames.push("Admin");
-    }
 
     let user = {
         name: $("#addName").val(),
@@ -182,7 +168,7 @@ function addUser() {
         email: $("#addEmail").val(),
         username: $("#addUsername").val(),
         password: $("#addPassword").val(),
-        roles: rolesNames
+        rolesNames: $("#rolesNamesAdd").val()
     }
 
     fetch('/rest/users', {
