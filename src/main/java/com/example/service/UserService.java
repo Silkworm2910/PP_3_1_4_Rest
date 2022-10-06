@@ -2,10 +2,11 @@ package com.example.service;
 
 import com.example.dto.UserReqDTO;
 import com.example.dto.UserRespDTO;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     boolean saveUser(UserReqDTO userReqDTO);
 

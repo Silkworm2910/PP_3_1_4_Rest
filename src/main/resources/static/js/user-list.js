@@ -6,7 +6,7 @@ function updateUserTable() {
     const userList = document.querySelector('#tableBody');
     let output = '';
 
-    fetch('/rest/users')
+    fetch('/api/users')
         .then(res => res.json())
         .then(data => {
             data.forEach(user => {
@@ -40,7 +40,7 @@ function parseUserRoles(roles) {
 }
 
 function openEditForm(id) {
-    fetch('/rest/users/' + id)
+    fetch('/api/users/' + id)
         .then(res => res.json())
         .then(async user => {
             $('#idEdit').val(user.id);
@@ -73,7 +73,7 @@ function openEditForm(id) {
 }
 
 function openDeleteForm(id) {
-    fetch('/rest/users/' + id)
+    fetch('/api/users/' + id)
         .then(res => res.json())
         .then(user => {
             $('#idDelete').val(user.id);
@@ -120,13 +120,13 @@ function closeDeleteModal() {
 }
 
 function deleteUser(id) {
-    fetch('/rest/users/' + id, {
+    fetch('/api/users/' + id, {
         method: 'DELETE',
     }).then(this.closeDeleteModal);
 }
 
 async function getAllRoles() {
-    const roles = fetch('/rest/roles')
+    const roles = fetch('/api/roles')
         .then(res => res.json())
     return Array.from(await roles);
 }
@@ -135,8 +135,8 @@ async function addCreateFormRoles() {
     cleanCreateRoles()
     let roles = await getAllRoles();
     for (let i in roles) {
-        $("#rolesNamesAdd")
-            .append('<option value="' + roles[i].name + '" id="add' + roles[i].name + '">' + roles[i].name + '</option>');
+            $("#rolesNamesAdd")
+                .append('<option value="' + roles[i].name + '" id="add' + roles[i].name + '">' + roles[i].name + '</option>');
     }
 }
 
@@ -151,7 +151,7 @@ function sendEditForm(id) {
         rolesNames: $("#rolesNamesEdit").val()
     }
 
-    fetch('/rest/users/' + id, {
+    fetch('/api/users/' + id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -171,7 +171,7 @@ function addUser() {
         rolesNames: $("#rolesNamesAdd").val()
     }
 
-    fetch('/rest/users', {
+    fetch('/api/users', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -3,13 +3,11 @@ package com.example.controller;
 import com.example.dto.UserReqDTO;
 import com.example.dto.UserRespDTO;
 import com.example.model.Role;
-import com.example.model.User;
 import com.example.service.RoleServiceImpl;
 import com.example.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,14 +16,14 @@ import java.util.Set;
 
 @org.springframework.web.bind.annotation.RestController
 @AllArgsConstructor
-@RequestMapping("/rest")
+@RequestMapping("/api")
 public class RestController {
 
     private final UserServiceImpl userService;
     private final RoleServiceImpl roleService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserRespDTO>> findAll(@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<UserRespDTO>> findAll() {
         final List<UserRespDTO> users = userService.findAllUsers();
 
         return users != null && !users.isEmpty()

@@ -3,8 +3,6 @@ package com.example.service;
 import com.example.dao.RoleDAO;
 import com.example.model.Role;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +10,6 @@ import java.util.Set;
 
 
 @Service
-@Getter
-@Setter
 @AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
